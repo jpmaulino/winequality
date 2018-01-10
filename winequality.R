@@ -1,13 +1,21 @@
-setwd("C:/Users/Jordan/Desktop/Sideprojects/")
+setwd("C:/Users/Jordan/Desktop/Sideprojects/winequality")
+
+library(corrplot)
 
 # ####Reading Data#####
 wines <- read.csv("winequality-red.csv")
 summary(wines)
 
-# ####EXPLORATORY PLOTS ####
+# ####EXPLORATORY ####
 hist(wines$quality)
+plot(wines)
 plot(quality ~ alcohol, wines)
 plot(quality ~ residual.sugar, wines)
+
+corrplot(cor(wines))
+
+#alcohol content seems to have a positive correlation to quality
+#volatile acidity appears to have a negative correlation
 
 # ####SPLITTING DATA ####
 set.seed(1)
