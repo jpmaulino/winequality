@@ -33,3 +33,21 @@ summary(fit.full)
 anova(fit.full)
 
 #volatile acidity, chlorides, total sulfur dioxide, sulphates, and alcohol are most significant
+
+#lets try a reduced model with these features
+fit.reduced <- lm(quality ~ volatile.acidity + chlorides + total.sulfur.dioxide + sulphates + alcohol, wines)
+summary(fit.reduced)
+
+#residuals (still bad), only slightly worse than the full model
+
+
+#lets try using classification instead...
+#the kaggle post suggested creating a binary feature for good (1) and not good
+#to do so, we need to set a cutoff value for this
+#lets say that a quality <=7 is good, and is bad otherwise...
+
+#TODO
+#create new binary good/bad feature
+#classification models
+#KNN, Random forest, logistic regression....
+
