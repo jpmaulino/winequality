@@ -17,6 +17,13 @@ corrplot(cor(wines))
 #alcohol content seems to have a positive correlation to quality
 #volatile acidity appears to have a negative correlation
 
+# #### Creating binary good/bad variable ####
+#this will be used later on for classification :)
+wines$good <- ifelse(wines$quality >= 7, 1, 0)
+hist(wines$good)
+
+
+
 # ####SPLITTING DATA ####
 set.seed(1)
 
