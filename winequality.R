@@ -2,10 +2,19 @@ setwd("C:/Users/Jordan/Desktop/Sideprojects/winequality")
 
 library(corrplot)
 library(pROC)
+library(lattice)
+library(ggplot2)
+
+library(caret)
 
 # ####Reading Data#####
 wines <- read.csv("winequality-red.csv")
 summary(wines)
+
+# #### Creating binary good/bad variable ####
+#this will be used later on for classification :)
+wines$good <- ifelse(wines$quality >= 7, 1, 0)
+hist(wines$good)
 
 # ####EXPLORATORY ####
 hist(wines$quality)
@@ -52,10 +61,6 @@ summary(fit.reduced)
 #lets say that a quality <=7 is good, and is bad otherwise...
 
 
-# #### Creating binary good/bad variable ####
-#this will be used later on for classification :)
-wines$good <- ifelse(wines$quality >= 7, 1, 0)
-hist(wines$good)
 
 
 # #### LOGISTIC REGRESSION ####
@@ -65,14 +70,19 @@ hist(wines$good)
 
 #volatile acidity, chlorides, total sulfur dioxide, sulphates, and alcohol are most significant
 
-log.fit <- glm(good ~ volatile.acidity + chlorides + total.sulfur.dioxide + sulphates +alcohol, wines, family=binomial(link="logit"))
+log.fit <- glm(good ~ volatile.acidity + chlorides + total.sulfur.dioxide + sulphates +alcohol, train, family=binomial(link="logit"))
 summary(log.fit)
 
 slog.fit <- pnorm(predict(log.fit))
 
-roc <- plot.roc(wines$good, slog.fit, main="AUC curve", percent=TRUE,ci=TRUE,print.auc=TRUE)
+roc <- plot.roc(train$good, slog.fit, main="AUC curve", percent=TRUE,ci=TRUE,print.auc=TRUE)
 roc.se <- ci.se(roc, specificities = seq(0,100,5))
 plot(roc.se, type="shape", col="blue")
+
+#AUC is 87%! preeeety good 
+
+pdata <- predict(log.fit, test, type="response")
+
 
 #TODO
 #KNN, random forest..
