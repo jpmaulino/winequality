@@ -81,8 +81,31 @@ plot(roc.se, type="shape", col="blue")
 
 #AUC is 87%! preeeety good 
 
-pdata <- predict(log.fit, test, type="response")
+glm.probs <- predict(log.fit, newdata = test, type="response")
+
+#create vector of class predictions
+glm.pred <- rep(0, nrow(test))
+glm.pred[glm.probs > .5] <- 1
+
+confusionMatrix(glm.pred, test$good)
+
+
+#we see our logisitic regresion model yields an 86% accuracy!
+
+
+# #### K-nearest Neighbors ####
+library(class)
+knn10 <- knn(train, test, cl = train$good, k=10)
+table(test$good, knn10)
+mean(test$good == knn10)
+
+knn20 <- knn(train, test, cl=train$good, k=20)
+table(test$good, knn20)
+mean(test$good == knn20)
+
+#knn with k=10 yields 89% accuracy
 
 
 #TODO
-#KNN, random forest..
+#random forest..
+
